@@ -1,0 +1,39 @@
+
+				
+'2021-09-09 12:00:00'/'2021-09-11 12:00:00'
+to get all
+http://localhost:9090/uvis
+
+
+get one by ID
+http://localhost:9090/uvis/2
+
+
+query by HKT, output in GMT
+http://localhost:9090/uvi/between?st=20210909_1200&ed=20210911_1200
+http://localhost:9090/uvi/between?st=20210909_0000&ed=20210911_2359
+
+
+query by GMT, output in GMT
+http://localhost:9090/uvi/on?date=20210909
+
+
+using server's time zone (HKT)
+http://localhost:9090/uvi/last2Days
+
+
+using server's time zone (HKT)
+http://localhost:9090/uvi/lastWeek
+
+
+
+
+
+psql -h obelix.epd.gov.hk -p 5432 -d met -U postgres -W
+
+psql -h x3_postgres -p 5432 -d met -U postgres -W
+
+
+
+docker run --rm --name x3api --net db-net --link x3_postgres -it allenlam/x3api bash
+
