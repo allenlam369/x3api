@@ -26,9 +26,6 @@ import allen.met.service.TideService;
 public class TideController {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-//	@Autowired
-//	private final TideRepository repo;
-
 	@Autowired
 	private TideService tService;
 
@@ -36,15 +33,9 @@ public class TideController {
 	@Qualifier(value = "metEntityManagerFactory")
 	private EntityManager em;
 
-//	// injection
-//	public TideController(TideRepository repo) {
-//		this.repo = repo;
-//	}
-
 	@PostMapping(value = "/saveOrUpdate", consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = {
 			MediaType.APPLICATION_JSON_VALUE })
 	Tide newTide(@RequestBody Tide newTide) {
-//		System.err.println("received data: " + newTide);
 		Tide t = tService.saveOrUpdate(newTide);
 		logger.info("saveOrUpdate " + t);
 		return t;
