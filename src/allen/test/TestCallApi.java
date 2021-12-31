@@ -31,7 +31,7 @@ public class TestCallApi {
 			total += charsRead;
 			String line = new String(arr, 0, charsRead);
 
-			System.err.println(line);
+			System.out.println(line);
 //			sb.append(line);
 
 			charsRead = br.read(arr, 0, bufferSize);
