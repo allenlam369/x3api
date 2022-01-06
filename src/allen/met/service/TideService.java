@@ -133,11 +133,27 @@ public class TideService {
 		return q.getResultList();
 	}
 
-//	public static <T> List<T> castList(Class<? extends T> clazz, Collection<?> c) {
-//		List<T> r = new ArrayList<T>(c.size());
-//		for (Object o : c)
-//			r.add(clazz.cast(o));
-//		return r;
-//	}
+	@SuppressWarnings("rawtypes")
+	public List getMissing(String st, String ed, Integer th) {
+		
+		String sql = "select\r\n"
+				+ "TO_CHAR(t.datetime, 'YYYYMMDD') as d,\r\n"
+				+ "TO_CHAR(datetime, 'YYYYMMDD-HH24') as prefix,\r\n"
+				+ "count(*)\r\n"
+				+ "from Tide t\r\n"
+				+ "WHERE t.datetime between '$1$' and '$2$'\r\n"
+				+ "GROUP BY d, prefix\r\n"
+				+ "having count(*) < $3$";
+		
+		sql = sql.replace("$1$", st);
+		sql = sql.replace("$2$", ed);
+		sql = sql.replace("$3$", String.valueOf(th));
+		
+		Query q = em.createNativeQuery(sql);
+		return q.getResultList();
+		
+//		return repo.getMissing(st, ed, th);
+		
+	}
 
 }

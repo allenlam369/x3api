@@ -56,4 +56,18 @@ public class TideController {
 	public List<Tide> oneWeek(@RequestParam int stationId) {
 		return tService.oneWeek(stationId);
 	}
+
+	// st, ed will be a string like "2021-10-12T00:00:00+08"
+	// th is a number, e.g. 100
+	@SuppressWarnings("rawtypes")
+	@GetMapping("/getMissing")
+	public List getMissing(@RequestParam String st, String ed, Integer th) {
+		List list = tService.getMissing(st, ed, th);
+
+		logger.info("getMissing, list size " + list.size());
+//		for (Object o : list) {
+//			logger.info(o.toString());
+//		}
+		return list;
+	}
 }
