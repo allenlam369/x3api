@@ -133,27 +133,53 @@ public class TideService {
 		return q.getResultList();
 	}
 
-	@SuppressWarnings("rawtypes")
-	public List getMissing(String st, String ed, Integer th) {
-		
-		String sql = "select\r\n"
-				+ "TO_CHAR(t.datetime, 'YYYYMMDD') as d,\r\n"
-				+ "TO_CHAR(datetime, 'YYYYMMDD-HH24') as prefix,\r\n"
-				+ "count(*)\r\n"
-				+ "from Tide t\r\n"
-				+ "WHERE t.datetime between '$1$' and '$2$'\r\n"
-				+ "GROUP BY d, prefix\r\n"
-				+ "having count(*) < $3$";
-		
+	@SuppressWarnings("unchecked")
+	public List<Object[]> getMissingXX(String st, String ed, Integer th) {
+
+		String sql = "select\r\n" + "TO_CHAR(t.datetime, 'YYYYMMDD') as d,\r\n"
+				+ "TO_CHAR(datetime, 'YYYYMMDD-HH24') as prefix,\r\n" + "count(*)\r\n" + "from Tide t\r\n"
+				+ "WHERE t.datetime between '$1$' and '$2$'\r\n" + "GROUP BY d, prefix\r\n"
+				+ "having count(*) < $3$\r\n" + "Order By prefix";
+
 		sql = sql.replace("$1$", st);
 		sql = sql.replace("$2$", ed);
 		sql = sql.replace("$3$", String.valueOf(th));
-		
+
+		Query q = em.createQuery(sql);
+
+		// return List<Object[]>
+		return q.getResultList();
+
+//		return repo.getMissing(st, ed, th);
+
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Object[]> getMissing(String st, String ed, Integer th) {
+
+		String sql = "SELECT a.s_date,a.ts_prefix, CASE WHEN b.count > 0 THEN b.count ELSE a.count END\r\n"
+				+ "FROM\r\n"
+				+ "(SELECT TO_CHAR(t.TIMESTAMP,'YYYYMMDD') AS s_date,TO_CHAR(t.TIMESTAMP,'YYYYMMDD-HH24') AS ts_prefix,0 AS count\r\n"
+				+ "FROM generate_series(timestamp '#1#', timestamp '#2#', INTERVAL  '1 hour') t(x)) a\r\n"
+				+ "LEFT JOIN\r\n"
+				+ "(SELECT TO_CHAR(datetime AT TIME ZONE 'HKT', 'YYYYMMDD') AS s_date, TO_CHAR(datetime AT TIME ZONE 'HKT', 'YYYYMMDD-HH24') AS ts_prefix, COUNT(*)\r\n"
+				+ "FROM tide\r\n"
+				+ "WHERE datetime between '#1#' AND '#2#'\r\n"
+				+ "GROUP BY s_date, ts_prefix\r\n"
+				+ "ORDER BY s_date, ts_prefix) b\r\n"
+				+ "ON a.s_date=b.s_date AND a.ts_prefix=b.ts_prefix\r\n"
+				+ "where CASE WHEN b.count > 0 THEN b.count ELSE a.count END <= #3#";
+
+
+		sql = sql.replaceAll("#1#", st);
+		sql = sql.replaceAll("#2#", ed);
+		sql = sql.replace("#3#", String.valueOf(th));
+
 		Query q = em.createNativeQuery(sql);
 		return q.getResultList();
-		
+
 //		return repo.getMissing(st, ed, th);
-		
+
 	}
 
 }

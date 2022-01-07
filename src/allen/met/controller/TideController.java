@@ -1,5 +1,6 @@
 package allen.met.controller;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -59,15 +60,43 @@ public class TideController {
 
 	// st, ed will be a string like "2021-10-12T00:00:00+08"
 	// th is a number, e.g. 100
-	@SuppressWarnings("rawtypes")
-	@GetMapping("/getMissing")
-	public List getMissing(@RequestParam String st, String ed, Integer th) {
-		List list = tService.getMissing(st, ed, th);
+	@GetMapping("/getMissingXX")
+	public List<Object[]> getMissingXX(@RequestParam String st, String ed, Integer th) {
+		List<Object[]> list = tService.getMissing(st, ed, th);
 
+		for (Object[] arr : list) {
+			try {
+				String start = (String) arr[0];
+				String end = (String) arr[1];
+				Long threshold = (Long) arr[2];
+				logger.info(start + " " + end + " " + threshold);
+			} catch (Exception e) {
+				logger.error(e.getMessage());
+			}
+		}
+		logger.info("getMissingXX, list size " + list.size());
+
+		return list;
+	}
+
+	// st, ed will be a string like "2021-10-12T00:00:00+08"
+	// th is a number, e.g. 100
+	@GetMapping("/getMissing")
+	public List<Object[]> getMissing(@RequestParam String st, String ed, Integer th) {
+		List<Object[]> list = tService.getMissing(st, ed, th);
+
+		for (Object[] arr : list) {
+			try {
+				String start = (String) arr[0];
+				String end = (String) arr[1];
+				BigInteger threshold = (BigInteger) arr[2];
+				logger.info(start + " " + end + " " + threshold);
+			} catch (Exception e) {
+				logger.error(e.getMessage());
+			}
+		}
 		logger.info("getMissing, list size " + list.size());
-//		for (Object o : list) {
-//			logger.info(o.toString());
-//		}
+
 		return list;
 	}
 }
