@@ -58,7 +58,7 @@ public class TideController {
 		return tService.oneWeek(stationId);
 	}
 
-	// st, ed will be a string like "2021-10-12T00:00:00+08"
+	// st, ed will be a string like "20211012"
 	// th is a number, e.g. 100
 	@GetMapping("/getMissingXX")
 	public List<Object[]> getMissingXX(@RequestParam String st, String ed, Integer th) {
@@ -79,7 +79,7 @@ public class TideController {
 		return list;
 	}
 
-	// st, ed will be a string like "2021-10-12T00:00:00+08"
+	// st, ed will be a string like "20211012"
 	// th is a number, e.g. 100
 	@GetMapping("/getMissing")
 	public List<Object[]> getMissing(@RequestParam String st, String ed, Integer th) {
