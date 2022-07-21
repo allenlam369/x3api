@@ -133,27 +133,7 @@ public class TideService {
 		return q.getResultList();
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<Object[]> getMissingXX(String st, String ed, Integer th) {
 
-		String sql = "select\r\n" + "TO_CHAR(t.datetime, 'YYYYMMDD') as d,\r\n"
-				+ "TO_CHAR(datetime, 'YYYYMMDD-HH24') as prefix,\r\n" + "count(*)\r\n" + "from Tide t\r\n"
-				+ "WHERE t.datetime between '$1$' and '$2$'\r\n" + "GROUP BY d, prefix\r\n"
-				+ "having count(*) < $3$\r\n" + "Order By prefix";
-
-		sql = sql.replace("$1$", st);
-		sql = sql.replace("$2$", ed);
-		sql = sql.replace("$3$", String.valueOf(th));
-
-		Query q = em.createQuery(sql);
-
-		// return List<Object[]>
-		return q.getResultList();
-
-//		return repo.getMissing(st, ed, th);
-
-	}
-	
 	@SuppressWarnings("unchecked")
 	public List<Object[]> getMissing(String st, String ed, Integer th) {
 

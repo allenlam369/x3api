@@ -60,27 +60,6 @@ public class TideController {
 
 	// st, ed will be a string like "20211012"
 	// th is a number, e.g. 100
-	@GetMapping("/getMissingXX")
-	public List<Object[]> getMissingXX(@RequestParam String st, String ed, Integer th) {
-		List<Object[]> list = tService.getMissing(st, ed, th);
-
-		for (Object[] arr : list) {
-			try {
-				String start = (String) arr[0];
-				String end = (String) arr[1];
-				Long threshold = (Long) arr[2];
-				logger.info(start + " " + end + " " + threshold);
-			} catch (Exception e) {
-				logger.error(e.getMessage());
-			}
-		}
-		logger.info("getMissingXX, list size " + list.size());
-
-		return list;
-	}
-
-	// st, ed will be a string like "20211012"
-	// th is a number, e.g. 100
 	@GetMapping("/getMissing")
 	public List<Object[]> getMissing(@RequestParam String st, String ed, Integer th) {
 		List<Object[]> list = tService.getMissing(st, ed, th);
